@@ -1,0 +1,107 @@
+{
+  "preferences": [],
+  "feedback": [
+    {
+      "text": "hey",
+      "sentiment": "negative"
+    },
+    {
+      "text": "hey",
+      "sentiment": "positive"
+    },
+    {
+      "text": "hey",
+      "sentiment": "positive"
+    },
+    {
+      "text": "hey",
+      "sentiment": "positive (auto-inferred)"
+    },
+    {
+      "text": "hey",
+      "sentiment": "positive (auto-inferred)"
+    },
+    {
+      "text": "hey",
+      "sentiment": "positive (auto-inferred)"
+    },
+    {
+      "text": "what",
+      "sentiment": "positive (auto-inferred)"
+    },
+    {
+      "text": "hey",
+      "sentiment": "positive (auto-inferred)"
+    },
+    {
+      "text": "who created you and why",
+      "sentiment": "positive (auto-inferred)"
+    },
+    {
+      "text": "hey",
+      "sentiment": "positive (auto-inferred)"
+    },
+    {
+      "text": "what can u do?",
+      "sentiment": "positive (auto-inferred)"
+    },
+    {
+      "text": "do you know about the file structure of the project= folder u r created in?",
+      "sentiment": "positive (auto-inferred)"
+    },
+    {
+      "text": "C:/Users/Vinayak/miniconda3/envs/tanya/python.exe tools/warm_llama.py",
+      "sentiment": "positive (auto-inferred)"
+    },
+    {
+      "text": "C:/Users/Vinayak/miniconda3/envs/tanya/python.exe tools/run_chat_once.py",
+      "sentiment": "positive (auto-inferred)"
+    },
+    {
+      "text": "C:/Users/Vinayak/miniconda3/envs/tanya/python.exe tools/run_chat_once.py",
+      "sentiment": "positive (auto-inferred)"
+    },
+    {
+      "text": "C:/Users/Vinayak/miniconda3/envs/tanya/python.exe tools/run_chat_once.py",
+      "sentiment": "positive (auto-inferred)"
+    },
+    {
+      "text": "C:/Users/Vinayak/miniconda3/envs/tanya/python.exe tanya_terminal_chat.py",
+      "sentiment": "positive (auto-inferred)"
+    },
+    {
+      "text": "C:/Users/Vinayak/miniconda3/envs/tanya/python.exe tools/run_chat_once.py",
+      "sentiment": "positive (auto-inferred)"
+    },
+    {
+      "text": "hey",
+      "sentiment": "positive (auto-inferred)"
+    },
+    {
+      "text": "what do u do for livign",
+      "sentiment": "positive (auto-inferred)"
+    }
+  ],
+  "satisfaction": [
+    0,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ]
+}
