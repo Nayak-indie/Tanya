@@ -1,119 +1,381 @@
-Tanya — Local AI Agent
-======================
+# 🤖 Tanya — Tactical Autonomous Neural Yielding Agent Framework
 
-Summary
--------
-Tanya is a local, extensible AI agent framework customized for an individual developer (Vinayak). It runs local models (GGUF/llama_cpp) when available and falls back to an HTTP-based local server (Ollama) for generation. The project is under active development.
+> 🧠 Modular Agent Architecture  
+> ⚙️ Local-First Execution  
+> 🛡️ Policy-Enforced Autonomy  
+> 👨‍💻 Engineered by nayak-indie (Vinayak)
 
-Quick run
----------
-1. Ensure Python 3.10+ and a suitable environment is active (e.g., conda `tanya`).
-2. If you have the GGUF model file `Mistral-7B-Instruct-v0.3-Q4_K_M.gguf` in the repo root, the code can use `llama-cpp-python` for local inference. Otherwise, run a local Ollama server and set `OLLAMA_URL` if different from the default.
+---
 
-Example:
+# 📌 Overview
 
-PowerShell:
+**Tanya (Tactical Autonomous Neural Yielding Agent)** is a modular, local-first AI agent framework designed for:
 
-$env:OLLAMA_URL = "http://localhost:11434/api/generate"
-& C:/Users/Vinayak/miniconda3/envs/tanya/python.exe c:/Users/Vinayak/Documents/Projects/Tanya/tanya_terminal_chat.py
+- Structured reasoning
+- Layered memory management
+- Skill-based execution control
+- Safe system interaction
+- Semi-autonomous operational loops
+- Optional backend performance acceleration
 
-Requirements (suggested)
-------------------------
-- python>=3.10
-- requests
-- llama-cpp-python (optional — required for GGUF/llama_cpp local inference)
+Tanya is **not just a chatbot**.
 
-You can install via:
+She is a structured computational agent framework built for controlled autonomy and modular expansion.
+
+---
+
+# 🧭 Philosophy & Design Principles
+
+Tanya is built on the following core directives:
+
+- ✔ Modular > Monolithic
+- ✔ Controlled Autonomy > Chaos
+- ✔ Structured Reasoning > Prompt Guessing
+- ✔ Skill-Validated Execution > Direct System Calls
+- ✔ Policy-Governed Behavior > Unbounded Authority
+- ✔ Reversible Operations > Destructive Execution
+
+Tanya does **not** claim sentience or consciousness.
+
+When asked who she is, she responds:
+
+> "I am Tanya, an AI agent framework created by nayak-indie."
+
+She operates strictly within defined architectural constraints.
+
+---
+
+# 🏗️ Architecture Overview
+
+## 📂 Project Structure
+
+```bash
+brain_py/
+│
+├── autonomy/
+├── cognition/
+├── core/
+├── dialogue/
+├── glue/
+├── interface/
+├── memory/
+├── policies/
+├── reasoning/
+├── skills/
+├── system/
+└── vision/
+
+core_rust/
+tools/
+
+🧠 Core Components
+🔹 Autonomy Layer
+
+Responsible for:
+
+Exploration logic
+
+Curiosity heuristics
+
+Background execution loops
+
+Controlled task polling
+
+🔹 Reasoning Layer
+
+Handles:
+
+Task decomposition
+
+Multi-step planning
+
+Reflection cycles
+
+Output stabilization
+
+Structured problem solving
+
+🔹 Memory System
+
+Includes:
+
+Short-term memory
+
+Working memory
+
+Long-term memory (SQLite-backed)
+
+Persistent state tracking
+
+Context summarization
+
+🔹 Skills Registry
+
+All external actions must pass through skill handlers.
+
+result = skill_registry.execute("file_read", args)
+
+
+🚫 No raw shell execution
+🚫 No unmanaged subprocess calls
+🚫 No direct filesystem manipulation
+
+🔹 Policy Enforcement
+
+Acts as a boundary layer between reasoning and execution.
+
+Enforces:
+
+Operational limits
+
+Ethical constraints
+
+Permission gating
+
+Safe execution fallbacks
+
+🔹 Rust Backend (core_rust/)
+
+Optional performance-oriented backend layer.
+
+Provides:
+
+Sandboxed execution
+
+Deterministic utilities
+
+Future concurrency support
+
+Low-level performance acceleration
+
+🧠 Model Strategy
+
+Tanya supports dual inference routing.
+
+1️⃣ Local GGUF Inference (Preferred)
+
+Example model:
+
+Mistral-7B-Instruct-v0.3-Q4_K_M.gguf
+
+
+Loaded using:
+
+llama-cpp-python
+
+Advantages
+
+Fully offline
+
+Low latency
+
+Direct model control
+
+No external dependency
+
+2️⃣ Ollama Fallback
+
+Used if local GGUF model is unavailable.
+
+Default endpoint:
+
+http://localhost:11434/api/generate
+
+
+Supports:
+
+HTTP streaming
+
+Local model hosting
+
+Flexible experimentation
+
+🔁 Model Selection Logic
+if gguf_exists and llama_cpp_available:
+    use_local_model()
+else:
+    use_ollama()
+
+⚡ Setup
+✅ Requirements
+
+Python 3.10+
+
+requests
+
+llama-cpp-python (recommended)
+
+📦 Installation
+
+Using requirements file:
 
 pip install -r requirements.txt
 
-or individually:
+
+Manual installation:
 
 pip install requests
-pip install "llama-cpp-python"  # optional for GGUF local model
+pip install llama-cpp-python
 
-Quick tips for low-latency local inference:
-
-- Place `Mistral-7B-Instruct-v0.3-Q4_K_M.gguf` in the repository root.
-- Install `llama-cpp-python` (pip install "llama-cpp-python").
-- Configure environment variables before running Tanya:
-  - `LLAMA_N_THREADS`: integer number of host threads for inference (e.g., 8).
-  - `LLAMA_DEVICE`: optional device hint (e.g., `cpu` or `cuda`).
-  - `TANYA_GRANT_FILE_ACCESS=true`: allows Tanya to list/read files when asked.
-
-  Performance tips and quick commands
-
-  - Warm the model at startup to avoid long first-response latency (Tanya supports a blocking warm-up via `mixtral_client.warmup_now`).
-  - Environment recommendations:
-    - `LLAMA_N_THREADS=8` for an 8-core CPU. Also set `OMP_NUM_THREADS` to the same value.
-    - `LLAMA_DEVICE=cpu` (or `cuda` if you have GPU + proper build/runtime).
-
-  Quick benchmark (from repo root):
-
-  ```bash
-  # activate your conda env (tanya)
-  conda activate tanya
-  python tools/benchmark_llama.py
-  ```
-
-  If you want Tanya to warm the model automatically on CLI startup, set (default true):
-
-  ```bash
-  export TANYA_WARM_LLAMA=true
-  python tanya_terminal_chat.py
-  ```
-
-  To skip blocking warm-up and initialize lazily, set:
-
-  ```bash
-  export TANYA_WARM_LLAMA=false
-  ```
-
-Example (PowerShell):
-
-```powershell
+▶️ Running Tanya
+PowerShell Example
 $env:LLAMA_N_THREADS = "8"
 $env:LLAMA_DEVICE = "cpu"
 $env:TANYA_GRANT_FILE_ACCESS = "true"
 $env:OLLAMA_URL = "http://localhost:11434/api/generate"
-pip install -r requirements.txt
-& C:/Users/Vinayak/miniconda3/envs/tanya/python.exe c:/Users/Vinayak/Documents/Projects/Tanya/tanya_terminal_chat.py
-```
 
-Project layout (high level)
----------------------------
-- brain_py/: Core agent code (reasoning, skills, memory, interface)
-  - autonomy/: autonomy loop and managers
-  - cognition/: thought utilities
-  - core/: registries
-  - dialogue/: conversation/orchestration
-  - interface/: CLI/orchestrator/voice/override
-  - memory/: stores and SQLite helpers
-  - policies/: ethics/limits/personality
-  - reasoning/: planner, decomposition, reflection
-  - skills/: agent skills (local model clients, file manager, retrain helper)
-  - system/: boot and events/logging
-- hf_model/: (optional) Hugging Face model cache / artifacts
-- Modelfile: Docker-like reference pointing at local GGUF
-- Mistral-7B-Instruct-v0.3-Q4_K_M.gguf: (expected) GGUF model file (not included)
-- tanya_terminal_chat.py: simple terminal chat UI (non-blocking, streams responses)
-- tanya_chat_history.json, tanya_memory.json, tanya_user_model.json: persisted state files
+conda activate tanya
+python tanya_terminal_chat.py
 
-How the client chooses the model
--------------------------------
-1. If `Mistral-7B-Instruct-v0.3-Q4_K_M.gguf` exists in the repository root and `llama_cpp` is installed, the client will load it via `llama_cpp.Llama` and stream output to the terminal.
-2. If local GGUF is unavailable or `llama_cpp` import fails, the client falls back to streaming HTTP calls to a local Ollama endpoint (`OLLAMA_URL`, default: `http://localhost:11434/api/generate`).
+⚙️ Performance Optimization
 
-Notes & Development Status
---------------------------
-- The project is actively under development. Many components are experimental (self-improvement, retraining, file-system skills).
-- Expect frequent changes; follow the repo history when upgrading or changing model files.
-- If you want, I can add a `requirements.txt` and a short run script to simplify getting started.
+Recommended environment variables:
 
-License / Safety
------------------
-- This is personal / experimental code. Be cautious about giving it access to the internet or critical file paths.
+LLAMA_N_THREADS=8
+OMP_NUM_THREADS=8
+LLAMA_DEVICE=cpu
+TANYA_WARM_LLAMA=true
 
-Last note
----------
-The project is still under development and may contain incomplete features and rough edges. Contributions and iterative improvements are expected.
+
+Benchmark model performance:
+
+python tools/benchmark_llama.py
+
+
+Disable warm-up blocking:
+
+TANYA_WARM_LLAMA=false
+
+🧪 Development Background
+
+Tanya was developed using:
+
+✨ Cursor as development interface
+
+🧠 Manual architectural design
+
+🔧 Custom reasoning pipeline engineering
+
+🛠️ Iterative backend restructuring
+
+🧩 Modular experimentation cycles
+
+The orchestration flow, boundary enforcement, and system architecture were manually designed and refined.
+
+This is not a one-shot auto-generated system.
+
+It is an evolving agent framework under active refinement.
+
+🛡️ Safety Model
+
+Tanya:
+
+❌ Does not overwrite files without explicit skill authorization
+
+❌ Does not execute destructive system commands
+
+❌ Does not escalate privileges
+
+❌ Does not silently self-modify core architecture
+
+✅ Logs structured execution events
+
+✅ Operates within policy-defined limits
+
+Filesystem access path:
+
+brain_py.skills.file_manager
+
+
+Internet access path:
+
+brain_py.autonomy.explorer
+
+📂 Repository Status
+
+⚠️ Current state:
+
+Partially shuffled directory structure
+
+Contains experimental modules
+
+Includes development artifacts
+
+May contain unnecessary files
+
+May include cache remnants (e.g., HuggingFace cache)
+
+Requires structural cleanup
+
+Requires continued development
+
+This repository is not production-clean yet.
+
+Refactoring and pruning are ongoing.
+
+🔬 Experimental Areas
+
+Semi-autonomous background loops
+
+Structured self-improvement scaffolding
+
+Rust performance bridges
+
+Multi-model routing
+
+Memory abstraction improvements
+
+Backend learning workflows
+
+Breaking changes may occur.
+
+🎯 Vision
+
+Tanya is evolving toward:
+
+Structured agent orchestration
+
+Goal-driven modular execution
+
+Safe autonomous capability expansion
+
+Developer-augmented productivity
+
+Controlled adaptive workflows
+
+Not limitless.
+Not uncontrolled.
+
+But engineered autonomy.
+
+👨‍💻 Author
+
+Created and engineered by:
+
+nayak-indie (Vinayak)
+
+⚠️ Disclaimer
+
+This is a personal experimental AI agent framework.
+
+Use caution when enabling:
+
+Filesystem access
+
+Internet access
+
+Background autonomy loops
+
+Elevated execution permissions
+
+Always test in controlled environments.
+
+⭐ Project Status
+
+🟡 Active Development
+🧠 Experimental Agent Architecture
+⚙️ Modular System Design
+🚧 Cleanup & refinement required
+
+Tanya is not just a chatbot.
+She is a framework in progress.
