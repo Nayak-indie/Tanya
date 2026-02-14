@@ -1,2 +1,6 @@
 /.cursor
 /.qodohf_model/glm5/models--zai-org--GLM-5/blobs/*
+
+*.gguf
+hf_model/glm5/models--zai-org--GLM-5/blobs/
+hf_model/glm5/models--zai-org--GLM-5/.locks/
