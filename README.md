@@ -376,6 +376,19 @@ Always test in controlled environments.
 🧠 Experimental Agent Architecture
 ⚙️ Modular System Design
 🚧 Cleanup & refinement required
+and
+
+# Tanya Repo
+
+This repo contains the code and configs for Tanya.
+
+## Download the large model
+
+The Mistral-7B-Instruct GGUF model (~4.1GB) is **too big for GitHub**.  
+You can download it by running:
+
+```bash
+./download_gguf.sh
 
 Tanya is not just a chatbot.
 She is a framework in progress.
