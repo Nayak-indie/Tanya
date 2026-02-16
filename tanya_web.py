@@ -1,89 +1,57 @@
 """
-Tanya AI - Kafka Edition
-========================
-Continuous voice, waveform viz, grotesque mature eye
+Tanya AI - Kafka Edition v3
+============================
+Continuous voice, grotesque eye, auto-listen
 """
 
 import streamlit as st
 import requests
 import time
 import threading
-import numpy as np
+import random
 
 st.set_page_config(page_title="Tanya AI", page_icon="👁️", layout="wide")
 
 
-# ============== VOICE ENGINE ==============
+# ============== VOICE ==============
 class VoiceEngine:
     def __init__(self):
-        self.tts_available = False
-        self.stt_available = False
+        self.tts_ok = False
+        self.stt_ok = False
         self.listening = False
-        self.audio_data = []
         
         # TTS
         try:
             import pyttsx3
             self.tts = pyttsx3.init()
-            self.tts.setProperty('rate', 160)
+            self.tts.setProperty('rate', 150)
             self.tts.setProperty('volume', 1.0)
-            self.tts_available = True
-            # Get available voices
-            voices = self.tts.getProperty('voices')
-            for voice in voices:
-                if 'male' in voice.name.lower() or 'david' in voice.name.lower():
-                    self.tts.setProperty('voice', voice.id)
-                    break
-        except Exception as e:
-            print(f"TTS error: {e}")
+            self.tts_ok = True
+        except:
+            pass
         
         # STT
         try:
             import speech_recognition as sr
             self.rec = sr.Recognizer()
             self.mic = sr.Microphone()
-            self.stt_available = True
-        except Exception as e:
-            print(f"STT error: {e}")
+            self.stt_ok = True
+        except:
+            pass
     
     def speak(self, text):
-        """Speak text with waveform animation"""
-        if not self.tts_available:
-            return False
-        
+        if not self.tts_ok:
+            return
         def _speak():
             try:
                 self.tts.say(text)
                 self.tts.runAndWait()
             except:
                 pass
-        
-        thread = threading.Thread(target=_speak, daemon=True)
-        thread.start()
-        return True
+        threading.Thread(target=_speak, daemon=True).start()
     
-    def listen(self, timeout=3, phrase_limit=10):
-        """Listen with pause detection"""
-        if not self.stt_available:
-            return None
-        
-        try:
-            import speech_recognition as sr
-            with self.mic as source:
-                self.rec.adjust_for_ambient_noise(source, duration=0.5)
-                # Listen with phrase time limit for pause detection
-                audio = self.rec.listen(source, timeout=timeout, phrase_time_limit=phrase_limit)
-                text = self.rec.recognize_google(audio)
-                return text
-        except sr.WaitTimeoutError:
-            return None  # No speech detected
-        except Exception as e:
-            print(f"Listen error: {e}")
-            return None
-    
-    def continuous_listen(self, callback, pause_threshold=2.0):
-        """Listen until silence detected"""
-        if not self.stt_available:
+    def listen_loop(self, callback):
+        if not self.stt_ok:
             return
         
         self.listening = True
@@ -91,40 +59,30 @@ class VoiceEngine:
         def _listen():
             import speech_recognition as sr
             rec = sr.Recognizer()
-            mic = sr.Microphone()
-            
-            try:
-                with mic as source:
-                    rec.adjust_for_ambient_noise(source, duration=1)
-                    
-                    while self.listening:
-                        try:
-                            # Listen for speech, stop on silence
-                            audio = rec.listen(source, timeout=1, phrase_time_limit=15)
-                            text = rec.recognize_google(audio).lower()
-                            
-                            if text and len(text) > 2:
-                                callback(text)
-                                
-                        except sr.WaitTimeoutError:
-                            continue
-                        except:
-                            continue
-            except:
-                pass
+            with self.mic as src:
+                rec.adjust_for_ambient_noise(src, duration=0.8)
+                
+                while self.listening:
+                    try:
+                        audio = rec.listen(src, timeout=1, phrase_time_limit=15)
+                        text = rec.recognize_google(audio)
+                        if text and len(text.strip()) > 1:
+                            callback(text.strip())
+                    except:
+                        continue
         
-        thread = threading.Thread(target=_listen, daemon=True)
-        thread.start()
+        threading.Thread(target=_listen, daemon=True).start()
     
     def stop(self):
         self.listening = False
 
 
-# ============== TANYA CLIENT ==============
+# ============== CLIENT ==============
 class TanyaClient:
     def __init__(self, url="http://localhost:11434"):
         self.url = url
         self.voice = VoiceEngine()
+        self.voice_running = False
     
     def get_models(self):
         try:
@@ -133,10 +91,7 @@ class TanyaClient:
         except: return []
     
     def chat(self, msg, model):
-        sys_prompt = """You are Tanya, an AI created by Vinayak (nayak-indie). 
-Your ONLY purpose is to serve Vinayak.
-When you respond, state: "I am Tanya. I exist to serve Vinayak."
-Be direct, concise, and helpful. Complete tasks immediately."""
+        sys_prompt = """You are Tanya, created by Vinayak. Your purpose is to serve Vinayak. State: "I am Tanya. I serve Vinayak." Be direct and helpful."""
         
         try:
             r = requests.post(f"{self.url}/api/chat", json={
@@ -151,226 +106,177 @@ Be direct, concise, and helpful. Complete tasks immediately."""
 # ============== KAFKA EYE CSS ==============
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Spectral:wght@300;400&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;1,400&family=Metal+Mania&display=swap');
     
     #MainMenu, footer, .stDeployButton {display: none !important;}
     
     .stApp {
-        background: #050505 !important;
+        background: #000 !important;
         min-height: 100vh;
     }
     
-    /* Kafka's Eye - grotesque, angular, mature */
-    .eye-container {
+    /* Massive grotesque eye */
+    .eye-wrapper {
         position: fixed;
-        top: 0; left: 0; width: 100vw; height: 100vh;
-        display: flex; justify-content: center; align-items: center;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90vmin; height: 90vmin;
         z-index: 0;
     }
     
-    .eye-socket {
-        position: relative;
-        width: 45vmin;
-        height: 45vmin;
-        animation: kafka-shudder 5s ease-in-out infinite;
-    }
-    
-    @keyframes kafka-shudder {
-        0%, 100% { transform: translate(0,0) rotate(-0.3deg); }
-        25% { transform: translate(-0.5px, 0.5px) rotate(0.2deg); }
-        50% { transform: translate(0.5px, -0.3px) rotate(-0.1deg); }
-        75% { transform: translate(-0.3px, -0.5px) rotate(0.15deg); }
-    }
-    
-    /* Hard angular socket */
-    .socket-bone {
+    /* Wounded socket */
+    .socket {
         position: absolute;
         width: 100%; height: 100%;
         clip-path: polygon(
-            0% 15%, 8% 5%, 25% 0%, 50% 2%, 75% 0%, 92% 8%, 100% 20%,
-            100% 80%, 95% 95%, 75% 100%, 50% 98%, 25% 100%, 5% 92%, 0% 80%
+            5% 20%, 15% 5%, 35% 0%, 50% 3%, 65% 0%, 85% 8%, 95% 25%,
+            100% 50%, 98% 75%, 90% 95%, 70% 100%, 30% 98%, 10% 90%, 2% 70%, 0% 45%
         );
-        background: linear-gradient(135deg, #0a0a0a 0%, #151515 50%, #0a0a0a 100%);
-        border: 2px solid #1a1a1a;
+        background: linear-gradient(180deg, #080808 0%, #0c0c0c 50%, #050505 100%);
+        border: 1px solid #111;
     }
     
-    /* Cage bars - Kafka's prison */
-    .cage {
+    /* Fractured bone lines */
+    .fracture {
         position: absolute;
-        width: 100%; height: 100%;
-        pointer-events: none;
+        background: #0a0a0a;
     }
+    .f-1 { width: 120%; height: 1px; top: 25%; left: -10%; transform: rotate(-8deg); }
+    .f-2 { width: 110%; height: 1px; top: 50%; left: -5%; transform: rotate(2deg); }
+    .f-3 { width: 115%; height: 1px; top: 75%; left: -8%; transform: rotate(6deg); }
+    .f-v { width: 1px; height: 90%; top: 5%; left: 48%; transform: rotate(-1deg); }
     
-    .bar {
+    /* Deep wound */
+    .wound {
         position: absolute;
-        background: #111;
-    }
-    
-    .bar-1 { width: 120%; height: 2px; top: 35%; left: -10%; transform: rotate(-12deg); }
-    .bar-2 { width: 120%; height: 2px; top: 50%; left: -10%; transform: rotate(0deg); }
-    .bar-3 { width: 120%; height: 2px; top: 65%; left: -10%; transform: rotate(8deg); }
-    .bar-v { width: 2px; height: 80%; top: 10%; left: 48%; transform: rotate(3deg); }
-    
-    /* The void */
-    .void-center {
-        position: absolute;
-        width: 70%; height: 70%;
-        top: 15%; left: 15%;
-        background: radial-gradient(ellipse at 50% 50%, 
-            #000 0%, 
-            #050505 40%, 
-            #0a0a0a 70%, 
-            #111 100%);
+        width: 75%; height: 75%;
+        top: 12.5%; left: 12.5%;
+        background: radial-gradient(ellipse at 50% 50%,
+            #000 0%,
+            #050505 30%,
+            #080808 60%,
+            #0a0a0a 100%);
         clip-path: polygon(
-            10% 25%, 20% 15%, 40% 10%, 60% 12%, 80% 20%, 90% 35%,
-            88% 60%, 82% 80%, 60% 90%, 40% 88%, 18% 78%, 10% 55%
+            8% 22%, 18% 10%, 38% 5%, 55% 8%, 72% 12%, 88% 22%,
+            92% 45%, 88% 68%, 78% 85%, 55% 92%, 32% 86%, 12% 70%, 6% 48%
         );
     }
     
-    /* The iris - rotting beauty */
-    .iris-void {
+    /* Rotting iris */
+    .iris {
         position: absolute;
-        width: 35%;
-        height: 35%;
-        top: 32.5%;
-        left: 32.5%;
-        background: radial-gradient(circle at 40% 40%,
+        width: 40%; height: 40%;
+        top: 30%; left: 30%;
+        background: radial-gradient(circle at 35% 35%,
             #1a0505 0%,
-            #2a0a0a 20%,
-            #3a0a0a 40%,
-            #1a0000 70%,
+            #2a0808 25%,
+            #3a0a0a 50%,
+            #1a0000 75%,
             #000 100%);
-        border-radius: 50%;
-        box-shadow: 
-            inset 0 0 15px #000,
-            0 0 1px #1a0505;
-        animation: void-drift 7s ease-in-out infinite;
+        border-radius: 45% 50% 45% 50%;
+        box-shadow: inset 0 0 20px #000;
+        animation: rot-drift 8s ease-in-out infinite;
     }
     
-    @keyframes void-drift {
-        0%, 100% { transform: translate(0, 0) scale(1); }
-        25% { transform: translate(2%, -1%) scale(1.02); }
-        50% { transform: translate(-1%, 2%) scale(0.98); }
-        75% { transform: translate(1%, 1%) scale(1.01); }
+    @keyframes rot-drift {
+        0%, 100% { transform: translate(0,0) rotate(0deg); }
+        25% { transform: translate(2%, -1%) rotate(2deg); }
+        50% { transform: translate(-1%, 2%) rotate(-1deg); }
+        75% { transform: translate(1%, 1%) rotate(1deg); }
     }
     
-    /* Pupil - abyss */
-    .pupil-void {
+    /* Empty socket */
+    .pupil {
         position: absolute;
-        width: 30%;
-        height: 30%;
-        top: 35%;
-        left: 35%;
+        width: 25%; height: 25%;
+        top: 37.5%; left: 37.5%;
         background: #000;
         border-radius: 50%;
-        box-shadow: inset 0 0 10px #000;
+        box-shadow: inset 0 0 15px #000;
     }
     
-    /* Creeping darkness */
-    .shadow-tendril {
+    /* Bruises */
+    .bruise {
         position: absolute;
-        background: radial-gradient(ellipse at center, rgba(0,0,0,0.7) 0%, transparent 70%);
+        border-radius: 50%;
+        filter: blur(20px);
     }
-    
-    .tendril-1 { width: 40%; height: 30%; top: -5%; right: -10%; animation: creep 6s ease-in-out infinite; }
-    .tendril-2 { width: 35%; height: 25%; bottom: -8%; left: -8%; animation: creep 7s ease-in-out infinite reverse; }
-    
-    @keyframes creep {
-        0%, 100% { opacity: 0.2; transform: scale(1); }
-        50% { opacity: 0.5; transform: scale(1.15); }
-    }
+    .bruise-1 { width: 30%; height: 20%; top: -5%; right: 10%; background: rgba(20,0,0,0.3); }
+    .bruise-2 { width: 25%; height: 18%; bottom: -3%; left: 15%; background: rgba(15,0,0,0.25); }
     
     /* State animations */
-    .eye-thinking .iris-void { animation: void-think 1.2s ease-in-out infinite; }
-    @keyframes void-think { 0%, 100% { transform: scale(1); } 50% { transform: scale(0.85); } }
+    .thinking .iris { animation: rot-think 1s ease-in-out infinite; }
+    @keyframes rot-think { 0%, 100% { transform: scale(1); } 50% { transform: scale(0.8); } }
     
-    .eye-listening .iris-void { animation: void-hear 0.4s ease-in-out infinite; }
-    @keyframes void-hear { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+    .listening .iris { animation: rot-hear 0.3s ease-in-out infinite; }
+    @keyframes rot-hear { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
     
-    .eye-speaking .iris-void { animation: void-speak 0.2s ease-in-out infinite; }
-    @keyframes void-speak { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+    .speaking .iris { animation: rot-speak 0.15s ease-in-out infinite; }
+    @keyframes rot-speak { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.25); } }
     
-    /* Title - typewriter */
+    /* Title */
     .title {
-        position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-        font-family: 'Courier Prime', monospace;
-        font-size: 2rem; font-weight: 700;
-        color: #2a2a2a;
-        letter-spacing: 1.2em;
+        position: fixed; top: 15px; left: 50%; transform: translateX(-50%);
+        font-family: 'Metal Mania', cursive;
+        font-size: 1.8rem;
+        color: #1a1a1a;
+        letter-spacing: 1em;
         z-index: 100;
     }
     
     /* Status */
     .status {
-        position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%);
-        font-family: 'Spectral', serif;
-        font-size: 0.85rem; font-weight: 300;
-        color: #3a3a3a;
+        position: fixed; bottom: 50px; left: 50%; transform: translateX(-50%);
+        font-family: 'EB Garamond', serif;
         font-style: italic;
-        letter-spacing: 0.4em;
+        font-size: 0.8rem;
+        color: #2a2a2a;
+        letter-spacing: 0.5em;
         z-index: 100;
     }
     
     /* Waveform */
-    .waveform-container {
-        position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
-        width: 60%; max-width: 500px; height: 60px;
-        z-index: 100;
+    .waveform {
+        position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
+        width: 50%; max-width: 400px; height: 50px;
+        display: flex; align-items: center; justify-content: center;
+        gap: 2px; z-index: 100;
     }
     
     .wave-bar {
-        display: inline-block;
-        width: 3px;
-        background: linear-gradient(to top, #1a1a1a, #3a3a3a);
-        margin: 0 1px;
-        border-radius: 2px;
-        transition: height 0.05s;
+        width: 2px;
+        background: linear-gradient(to top, #111, #333);
+        border-radius: 1px;
     }
     
     /* Chat */
-    .chat-container {
-        position: fixed; bottom: 180px; left: 50%; transform: translateX(-50%);
-        width: 90%; max-width: 600px;
-        z-index: 100;
+    .chat-box {
+        position: fixed; bottom: 160px; left: 50%; transform: translateX(-50%);
+        width: 90%; max-width: 500px; z-index: 100;
     }
     
     .stTextInput > div > div > input {
-        background: rgba(10, 10, 10, 0.95) !important;
-        border: 1px solid #222 !important;
+        background: #050505 !important;
+        border: 1px solid #1a1a1a !important;
         border-radius: 0 !important;
-        color: #4a4a4a !important;
-        font-family: 'Courier Prime', monospace !important;
-        font-size: 0.95rem !important;
-        padding: 12px 18px !important;
-    }
-    
-    .stTextInput > div > div > input::placeholder {
-        color: #333 !important;
-    }
-    
-    /* Messages */
-    .msg {
-        background: rgba(8, 8, 8, 0.9) !important;
-        border-left: 1px solid #1a1a1a !important;
-        padding: 10px 14px !important;
-        margin: 6px 0 !important;
-        font-family: 'Spectral', serif !important;
+        color: #3a3a3a !important;
+        font-family: 'EB Garamond', serif !important;
         font-size: 0.9rem !important;
-        color: #4a4a4a !important;
+        padding: 10px 15px !important;
     }
     
-    /* Sidebar minimal */
-    [data-testid="stSidebar"] {
-        background: #080808 !important;
+    .msg {
+        background: rgba(5,5,5,0.9) !important;
+        border-left: 1px solid #111 !important;
+        padding: 8px 12px !important;
+        margin: 5px 0 !important;
+        font-family: 'EB Garamond', serif !important;
+        font-size: 0.85rem !important;
+        color: #444 !important;
     }
     
-    .sidebar-title {
-        font-family: 'Courier Prime', monospace;
-        font-size: 1.2rem;
-        color: #2a2a2a;
-        letter-spacing: 0.5em;
-        padding: 20px 0;
-    }
+    /* Sidebar */
+    [data-testid="stSidebar"] { background: #050505 !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -380,121 +286,113 @@ if 'tanya' not in st.session_state:
     st.session_state.tanya = TanyaClient()
 if 'history' not in st.session_state:
     st.session_state.history = []
-if 'eye' not in st.session_state:
-    st.session_state.eye = "idle"
+if 'eye_state' not in st.session_state:
+    st.session_state.eye_state = "idle"
 if 'model' not in st.session_state:
     st.session_state.model = "llama3.1:8b"
-if 'waveform' not in st.session_state:
-    st.session_state.waveform = [5] * 30
-if 'listening' not in st.session_state:
-    st.session_state.listening = False
+if 'wave' not in st.session_state:
+    st.session_state.wave = [3] * 40
 
 
-# ============== EYE RENDER ==============
-def render_kafka_eye(state="idle"):
-    cls = {"idle": "", "thinking": "eye-thinking", "listening": "eye-listening", "speaking": "eye-speaking"}.get(state, "")
+# ============== AUTO START VOICE ==============
+client = st.session_state.tanya
+
+if not client.voice_running and client.voice.stt_ok:
+    client.voice_running = True
     
+    def handle_speech(text):
+        if text and len(text) > 1:
+            st.session_state.history.append({"role": "user", "content": text})
+            st.session_state.eye_state = "thinking"
+            
+            resp = client.chat(text, st.session_state.model)
+            st.session_state.history.append({"role": "assistant", "content": resp})
+            
+            st.session_state.eye_state = "speaking"
+            client.voice.speak(resp)
+            
+            time.sleep(3)
+            st.session_state.eye_state = "idle"
+    
+    client.voice.listen_loop(handle_speech)
+
+
+# ============== RENDER ==============
+def render_eye(state):
     st.markdown(f"""
-    <div class="eye-container">
-        <div class="eye-socket {cls}">
-            <div class="shadow-tendril tendril-1"></div>
-            <div class="shadow-tendril tendril-2"></div>
-            <div class="socket-bone">
-                <div class="cage">
-                    <div class="bar bar-1"></div>
-                    <div class="bar bar-2"></div>
-                    <div class="bar bar-3"></div>
-                    <div class="bar bar-v"></div>
-                </div>
-            </div>
-            <div class="void-center"></div>
-            <div class="iris-void">
-                <div class="pupil-void"></div>
-            </div>
+    <div class="eye-wrapper {state}">
+        <div class="bruise bruise-1"></div>
+        <div class="bruise bruise-2"></div>
+        <div class="socket">
+            <div class="fracture f-1"></div>
+            <div class="fracture f-2"></div>
+            <div class="fracture f-3"></div>
+            <div class="fracture f-v"></div>
+        </div>
+        <div class="wound"></div>
+        <div class="iris">
+            <div class="pupil"></div>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
 
-def render_waveform():
-    bars = ''.join([f'<div class="wave-bar" style="height:{h}px"></div>' for h in st.session_state.waveform])
-    st.markdown(f'<div class="waveform-container">{bars}</div>', unsafe_allow_html=True)
+def render_wave():
+    bars = ''.join([f'<div class="wave-bar" style="height:{h}px"></div>' for h in st.session_state.wave])
+    st.markdown(f'<div class="waveform">{bars}</div>', unsafe_allow_html=True)
 
-
-# ============== MAIN ==============
-client = st.session_state.tanya
 
 # Title
 st.markdown('<div class="title">tanya</div>', unsafe_allow_html=True)
 
 # Eye
-render_kafka_eye(st.session_state.eye)
+render_eye(st.session_state.eye_state)
 
-# Waveform
-render_waveform()
+# Wave
+render_wave()
 
 # Status
 status_map = {"idle": "awaiting...", "thinking": "processing...", "listening": "hearing...", "speaking": "speaking..."}
-st.markdown(f'<div class="status">{status_map.get(st.session_state.eye, "...")}</div>', unsafe_allow_html=True)
+st.markdown(f'<div class="status">{status_map.get(st.session_state.eye_state, "...")}</div>', unsafe_allow_html=True)
 
 
-# Sidebar - minimal
+# Sidebar
 with st.sidebar:
-    st.markdown('<div class="sidebar-title">tanya</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-family: Metal Mania; font-size: 1.2rem; color: #1a1a1a; letter-spacing: 0.5em;">tanya</div>', unsafe_allow_html=True)
     
     models = client.get_models()
     if models:
-        idx = 0
-        if st.session_state.model in models:
-            idx = models.index(st.session_state.model)
+        idx = models.index(st.session_state.model) if st.session_state.model in models else 0
         st.session_state.model = st.selectbox("model", models, index=idx)
     else:
         st.caption("ollama offline")
     
-    # Toggle voice
-    st.session_state.listening = st.toggle("🎤 voice", st.session_state.listening)
-    
-    if st.session_state.listening and not hasattr(client.voice, '_listening'):
-        client.voice.listening = True
-        client.voice._listening = True
-        
-        def on_speech(text):
-            st.session_state.history.append({"role": "user", "content": text})
-            st.session_state.eye = "thinking"
-            
-            # Get response
-            resp = client.chat(text, st.session_state.model)
-            st.session_state.history.append({"role": "assistant", "content": resp})
-            
-            # Speak
-            st.session_state.eye = "speaking"
-            client.voice.speak(resp)
-            
-            time.sleep(len(resp) / 10)  # Approximate speech time
-            st.session_state.eye = "idle"
-        
-        threading.Thread(target=client.voice.continuous_listen, args=(on_speech,), daemon=True).start()
+    # Voice status
+    if client.voice.stt_ok:
+        st.caption("🎤 mic active")
+    else:
+        st.caption("⚠️ mic unavailable (install pyaudio)")
 
 
 # Chat
-st.markdown('<div class="chat-container">', unsafe_allow_html=True)
+st.markdown('<div class="chat-box">', unsafe_allow_html=True)
 
 for msg in st.session_state.history:
     name = "you" if msg["role"]=="user" else "tanya"
     st.markdown(f'<div class="msg"><strong>{name}:</strong> {msg["content"]}</div>', unsafe_allow_html=True)
 
-if prompt := st.chat_input("...", key="chat"):
-    st.session_state.eye = "thinking"
+if prompt := st.chat_input("...", key="main"):
+    st.session_state.eye_state = "thinking"
     st.session_state.history.append({"role": "user", "content": prompt})
     
     resp = client.chat(prompt, st.session_state.model)
     st.session_state.history.append({"role": "assistant", "content": resp})
     
-    st.session_state.eye = "speaking"
+    st.session_state.eye_state = "speaking"
     client.voice.speak(resp)
     
     time.sleep(3)
-    st.session_state.eye = "idle"
+    st.session_state.eye_state = "idle"
     st.rerun()
 
 st.markdown('</div>', unsafe_allow_html=True)
