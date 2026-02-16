@@ -1,6 +1,28 @@
 /.cursor
 /.qodohf_model/glm5/models--zai-org--GLM-5/blobs/*
 
+# Large model files
 *.gguf
 hf_model/glm5/models--zai-org--GLM-5/blobs/
 hf_model/glm5/models--zai-org--GLM-5/.locks/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Runtime artifacts (should not be committed)
+tanya*.log
+tanya*.db
+tanya*.json
+tanya*.jsonl
+!tanya_terminal_chat.py
+
+# Environment
+.env
+.env.local
+venv/
+.venv/
+env/
+.conda/
