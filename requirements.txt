@@ -1,3 +1,20 @@
+# Tanya AI - Core Dependencies
 requests
-llama-cpp-python  # optional, required if you want GGUF local inference via `llama_cpp`
-# pin versions if desired, e.g. requests==2.31.0
+flask
+psutil
+opencv-python
+
+# Streamlit Web UI
+streamlit
+
+# Optional: Local LLM inference
+# llama-cpp-python
+
+# Optional: Voice
+# pyttsx3
+# speech-recognition
+
+# Optional: Advanced
+# pyperclip
+# transformers
+# torch
