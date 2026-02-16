@@ -14,6 +14,12 @@
 - [x] Update main.py to initialize MemoryCore and pass to components
 - [x] Update brain_py/cognition/thoughts.py for inner voice stored in memory
 - [x] Create/Update personality module to store traits/rules in memory
+- [x] **NEW: Create curiosity_loop.py** - Proactive research when idle
+- [x] **NEW: Create skill_learner.py** - Auto-learns new skills
+- [x] **NEW: Create consolidator.py** - Memory organization when idle
+- [x] **NEW: Create background_runner.py** - 24/7 autonomous operation
+- [x] **NEW: Update main.py** - Integrates background learning
+- [x] **NEW: Create systemd service** - Run 24/7 as system service
 
 ## Pending Tasks
 - [ ] Update eyes overlay (if exists) to reflect activity states
@@ -24,6 +30,27 @@
 - [ ] Test curiosity-driven autonomy
 - [ ] Test automation learning
 
+## 24/7 Active Learning System
+### How it works:
+1. **Curiosity Loop** - Every 10min idle, researches topics from memory
+2. **Consolidation** - Every 60min idle, summarizes & organizes memories
+3. **Skill Learning** - Queues & learns new capabilities autonomously
+4. **Background Runner** - Manages all loops in background threads
+
+### To run 24/7:
+```bash
+# Install Ollama models (on your machine)
+ollama pull llama3.1:8b
+
+# Run directly
+python main.py
+
+# Or as systemd service
+sudo cp setup/systemd/tanya.service /etc/systemd/system/
+sudo systemctl enable tanya
+sudo systemctl start tanya
+```
+
 ## Followup Steps
 - [ ] Test memory persistence across sessions
 - [ ] Integrate vision (requires webcam)
@@ -31,3 +58,4 @@
 - [ ] Test speech output with modulation
 - [ ] Test curiosity-driven autonomy
 - [ ] Test automation learning
+- [ ] Add more skill templates for auto-learning
