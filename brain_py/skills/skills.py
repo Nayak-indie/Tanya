@@ -3,7 +3,14 @@ skills.py
 ---------
 Define Tanya's skills as modular, callable units.
 Skills are mapped to actions/tasks.
+
+Also integrates with brain_py.core.skill_registry for auto-discovery,
+documentation generation, and validation.
 """
+
+# Import registry for integration
+from brain_py.core.skill_registry import get_registry, register_skill
+
 
 class SkillStore:
     def _self_explain(self, orchestrator, params):
@@ -137,3 +144,31 @@ class SkillStore:
         if action in self.skills:
             return self.skills[action](orchestrator, params)
         return {"status": "fail", "result": f"No skill found for action '{action}'."}
+
+    # ---------------- REGISTRY INTEGRATION ---------------- #
+    def sync_to_registry(self):
+        """Sync all skills to the global registry for auto-discovery."""
+        registry = get_registry()
+        for action, method in self.skills.items():
+            # Try to get description from method's docstring
+            desc = method.__doc__.strip().split('\n')[0] if method.__doc__ else ""
+            registry.register(
+                skill_name=self.__class__.__name__,
+                action_name=action,
+                method=method,
+                description=desc
+            )
+        return registry
+
+    def get_skill_docs(self) -> str:
+        """Get auto-generated documentation for all skills."""
+        registry = get_registry()
+        # First sync to ensure registry is up to date
+        self.sync_to_registry()
+        return registry.generate_skill_docs()
+
+    def validate_skills(self) -> bool:
+        """Validate all registered skills are callable."""
+        registry = get_registry()
+        self.sync_to_registry()
+        return registry.validate()
