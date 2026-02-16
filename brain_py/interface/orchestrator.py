@@ -6,6 +6,7 @@ from brain_py.system.events import EventType
 from brain_py.skills.skills import SkillStore
 from brain_py.reasoning.planner import Planner
 from brain_py.memory.memory_core import MemoryCore
+from brain_py.policies.directive import CoreDirective
 import time
 import os
 
@@ -20,16 +21,18 @@ class Orchestrator:
         self.reflection = self  # placeholder for now
         self.skills = SkillStore()
         self.planner = Planner(self)
+        
+        # Core directive - Serve Vinayak
+        self.directive = CoreDirective()
+        
         from brain_py.skills.user_model import UserModel
         from brain_py.skills.auto_self_improver import analyze_and_update_prompt
         self.user_model = UserModel()
         self.analyze_and_update_prompt = analyze_and_update_prompt
+        
         # Tanya's self-concept: identity statement (keeps consistent with system prompt)
-        self.self_concept = (
-            "I am Tanya, your assistant created by Vinayak (nayak-indie). "
-            "I am helpful, concise, and can inspect files, run local tools, and reason about code and tasks. "
-            "If I'm unsure, I'll say so and propose a clear next step."
-        )
+        # UPDATED: Clear directive to serve Vinayak
+        self.self_concept = self.directive.get_identity()
 
     # ---------------- MEMORY ---------------- #
     def _observe_and_commit(self, event_type, metadata, task, result):
@@ -85,9 +88,14 @@ class Orchestrator:
 
         if event_type == EventType.USER_INPUT and payload:
             text = payload.get("text", "")
+            
+            # Track current task
+            self.directive.set_task(text)
+            
             # Predict satisfaction and learn preferences
             if any(word in text.lower() for word in ["like", "prefer", "love", "hate", "dislike"]):
                 self.user_model.add_preference(text)
+            
             # Try to route to a skill if possible
             # If file access is granted and the user asks about project/folder structure, list files
             grant = os.getenv("TANYA_GRANT_FILE_ACCESS", "false").lower() in ("1", "true", "yes")
@@ -97,8 +105,10 @@ class Orchestrator:
                     # use file_manager skill to list repo root
                     result = self.skills.execute(self, "file.list", {"directory": "."})
                     self.analyze_and_update_prompt([{"user": text, "reply": result.get("result", str(result))}])
+                    self.directive.complete_task()
                     return result
                 except Exception as e:
+                    self.directive.complete_task()
                     return {"status": "fail", "result": f"File access error: {e}"}
 
             for skill in self.skills.skills:
@@ -107,42 +117,55 @@ class Orchestrator:
                     params = {"text": text}
                     result = self.skills.execute(self, skill, params)
                     self.analyze_and_update_prompt([{"user": text, "reply": result.get("result", str(result))}])
+                    self.directive.complete_task()
                     return result
             if self.handle_override(text):
+                self.directive.complete_task()
                 return {"status": "done", "message": "User override executed."}
             if text.lower().startswith("edit self:"):
                 try:
                     _, rest = text.split(":", 1)
                     file, code = rest.strip().split(" ", 1)
-                    return self.skills.execute(self, "self.edit", {"file": file, "code": code})
+                    result = self.skills.execute(self, "self.edit", {"file": file, "code": code})
+                    self.directive.complete_task()
+                    return result
                 except Exception as e:
+                    self.directive.complete_task()
                     return {"status": "fail", "result": f"Invalid self-edit command: {e}"}
+            
             # Force Tanya's identity for self/identity/name questions
             identity_triggers = [
-                "who are you", "what is your name", "tell me about yourself", "your identity", "about yourself", "who r u", "who you are"
+                "who are you", "what is your name", "tell me about yourself", "your identity", "about yourself", "who r u", "who you are", "what can you do"
             ]
             if any(trigger in text.lower() for trigger in identity_triggers):
-                # Reflect on Tanya's self-concept
-                return {"status": "done", "result": self.self_concept}
+                # Reflect on Tanya's self-concept with directive
+                return {"status": "done", "result": self.directive.get_identity()}
+            
             if text.lower() in ("explain yourself", "what did you just do", "what did you learn"):
-                return self.skills.execute(self, "self.explain", {})
+                result = self.skills.execute(self, "self.explain", {})
+                self.directive.complete_task()
+                return result
+            
             # Otherwise, use LLM for general chat and fallback
             from brain_py.skills.mixtral_client import send_message as mixtral_send
             try:
                 messages = [{"role": "user", "content": text}]
                 reply = mixtral_send(messages)
             except Exception as e:
+                self.directive.complete_task()
                 return {"status": "fail", "result": f"Mixtral error: {e}"}
+            
             # Let Tanya self-improve (feedback handled in chat loop)
             self.analyze_and_update_prompt([{"user": text, "reply": reply}])
+            self.directive.complete_task()
             return {"status": "done", "result": reply}
 
         elif event_type == EventType.SYSTEM_BOOT:
-            return {"status": "done", "result": "Hello, Vinayak! Tanya at your service."}
+            return {"status": "done", "result": self.directive.get_identity()}
 
         elif event_type == EventType.SYSTEM_SHUTDOWN:
             self.alive = False
-            return {"status": "done", "result": "System shutting down."}
+            return {"status": "done", "result": "Tanya shutting down. Goodbye, Vinayak!"}
 
         elif event_type == EventType.MEMORY_WRITE and payload:
             text = payload.get("text", "")
