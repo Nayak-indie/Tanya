@@ -494,7 +494,7 @@ def render_file_browser():
             for item in sorted(items)[:20]:
                 path = os.path.join(base_dir, item)
                 icon = "📁" if os.path.isdir(path) else "📄"
-                st.markdown(f`<div class="file-item">{icon} {item}</div>`, 
+                st.markdown(f'<div class="file-item">{icon} {item}</div>', 
                           unsafe_allow_html=True)
         except PermissionError:
             st.error("Permission denied")
