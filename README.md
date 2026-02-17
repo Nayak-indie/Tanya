@@ -15,7 +15,7 @@
 
 Tanya (Trending And New Yielded Articles) is a **real polyglot news aggregator**—not a demo. Each language does actual work.
 
-**Python is only ~10%** of the codebase. The rest is 22 other languages.
+**Python is only ~20%** of the codebase. The rest is 22 other languages.
 
 ---
 
