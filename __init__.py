@@ -1,5 +1,0 @@
-self.ethics = EthicsPolicy()
-self.limits = LimitsPolicy()
-self.memory = MemoryStore()
-self.planner = Planner()
-self.decomposer = Decomposer()
