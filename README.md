@@ -10,7 +10,7 @@
 
 ---
 
-Tanya is a polyglot news aggregator experiment—scraping, analyzing, and serving news using Python, Rust, C++, Java, Go, and more. Built with 14+ languages as a fun experiment in seeing how different technologies can work together to build something useful.
+Tanya (Trending And New Yielded Articles) is a polyglot news aggregator experiment—scraping, analyzing, and serving news using Python, Rust, C++, Java, Go, and more. Built with 14+ languages as a fun experiment in seeing how different technologies can work together to build something useful.
 
 ---
 
