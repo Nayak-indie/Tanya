@@ -1,29 +1,98 @@
-# Contributing to Tanya
+# 🤝 Contributing to Tanya
 
-Tanya is a polyglot experiment in building a news aggregator. We welcome contributions—whether it's fixing bugs, adding features, or improving documentation!
-
----
-
-## Ways to Contribute
-
-- 🐛 **Report bugs**
-- 💡 **Suggest features**
-- 📖 **Improve docs**
-- 🔧 **Submit PRs**
-- 🎨 **UI/UX improvements**
+Thank you for your interest in contributing to Tanya!
 
 ---
 
-## Getting Started
+## 📋 Code of Conduct
+
+- Be respectful and inclusive
+- Provide constructive feedback
+- Help others learn and grow
+- Follow existing code style
+
+---
+
+## 🚀 How to Contribute
+
+### 1. Fork the Repository
 
 ```bash
-# Fork & clone
 git clone https://github.com/Nayak-indie/Tanya.git
 cd Tanya
+```
 
-# Setup
+### 2. Create a Branch
+
+```bash
+git checkout -b feature/your-feature-name
+# or
+git checkout -b fix/bug-description
+```
+
+### 3. Make Changes
+
+- Follow PEP 8 for Python
+- Add comments for complex logic
+- Update documentation if needed
+
+### 4. Test Your Changes
+
+```bash
+# Run the app
+streamlit run app.py
+
+# Test your feature
+```
+
+### 5. Commit and Push
+
+```bash
+git add .
+git commit -m "Add: description of your changes"
+git push origin feature/your-feature-name
+```
+
+### 6. Create Pull Request
+
+Open a PR on GitHub with:
+- Clear title
+- Description of changes
+- Screenshots (if UI changes)
+
+---
+
+## 🎯 Areas to Contribute
+
+### High Priority
+- 🔍 Better search functionality
+- 📊 Additional ML features
+- 🎨 UI/UX improvements
+- 🐛 Bug fixes
+
+### Medium Priority
+- 📰 Additional RSS sources
+- 🌐 Language translations
+- 📱 Mobile responsiveness
+
+### Low Priority
+- 📄 Documentation
+- 🧪 Testing
+- 🎁 New integrations
+
+---
+
+## 💻 Development Setup
+
+```bash
+# Clone
+git clone https://github.com/Nayak-indie/Tanya.git
+
+# Setup virtualenv
 python -m venv venv
 source venv/bin/activate
+
+# Install
 pip install -r requirements.txt
 
 # Run
@@ -32,36 +101,36 @@ streamlit run app.py
 
 ---
 
-## Code Standards
+## 📝 Commit Messages
 
-- Follow PEP 8 for Python
-- Add docstrings to new functions
-- Keep functions small and focused
-
----
-
-## Submitting PRs
-
-1. Create a branch: `feature/your-feature`
-2. Make changes
-3. Test locally
-4. Submit PR with clear description
-
----
-
-## Project Structure
+Use clear, descriptive commit messages:
 
 ```
-Tanya/
-├── app.py              # Main UI
-├── collect/            # RSS & HTML scrapers
-├── backend/ml/         # Sentiment & analysis
-├── core/              # Multi-lang engines
-└── integrations/       # APIs & notifications
+Add: sentiment analysis feature
+Fix: RSS feed parsing error
+Update: README documentation
+Remove: deprecated function
 ```
 
 ---
 
-## Need Help?
+## 🐛 Reporting Bugs
 
-Open an issue on GitHub!
+1. Check existing issues
+2. Create new issue with:
+   - Clear title
+   - Steps to reproduce
+   - Expected vs actual behavior
+   - Screenshots if applicable
+
+---
+
+## 💬 Getting Help
+
+- Open an issue for questions
+- Join discussions in PRs
+- Check existing documentation
+
+---
+
+**Thank you for contributing!** 🎉
