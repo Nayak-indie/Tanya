@@ -1,287 +1,220 @@
-# 🤖 Tanya — Tactical Autonomous Neural Yielding Agent Framework
+# 📰 Tanya - Smart News Aggregator
+
+<div align="center">
+
+![Python](https://img.shields.io/badge/python-3.12+-blue?style=for-the-badge&logo=python&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
+![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)
+![Status](https://img.shields.io/badge/status-active-success?style=for-the-badge)
+
+</div>
 
 ---
 
-# 📌 Overview
-**Tanya (Tactical Autonomous Neural Yielding Agent)** is a modular, local-first AI agent framework designed for:
-- Structured reasoning
-- Layered memory management
-- Skill-based execution control
-- Safe system interaction
-- Semi-autonomous operational loops
-- Optional backend performance acceleration
+## ✨ Features
 
-Tanya is **not just a chatbot**. She is a structured computational agent framework built for controlled autonomy and modular expansion.
+### 📊 News Collection
+- **Multi-source RSS Aggregation** - Collect from 20+ pre-configured sources
+- **HTML Scraping** - Extract news from any webpage
+- **Auto-refresh** - Keep your feed up to date
 
----
+### 🧠 Smart Analysis
+- **Sentiment Analysis** - Understand the tone of each article
+- **Keyword Extraction** - Discover trending topics
+- **Duplicate Detection** - Filter out similar articles
+- **Reading Time** - Know before you click
 
-# 🧭 Philosophy & Design Principles
-Tanya is built on the following core directives:
-- ✔ Modular > Monolithic
-- ✔ Controlled Autonomy > Chaos
-- ✔ Structured Reasoning > Prompt Guessing
-- ✔ Skill-Validated Execution > Direct System Calls
-- ✔ Policy-Governed Behavior > Unbounded Authority
-- ✔ Reversible Operations > Destructive Execution
+### 📖 Story Mode
+- **Backstory** - How it all started with historical context
+- **Current Events** - What's happening now
+- **My Take** - Balanced perspective and opinion
 
-Tanya does **not** claim sentience or consciousness. When asked who she is, she responds:
-> "I am Tanya, an AI agent framework created by nayak-indie."
-
-She operates strictly within defined architectural constraints.
-
----
-
-# 🏗️ Architecture Overview
-
-## 📂 Project Structure
-```
-brain_py/
-├── autonomy/
-├── cognition/
-├── core/
-├── dialogue/
-├── glue/
-├── interface/
-├── memory/
-├── policies/
-├── reasoning/
-├── skills/
-├── system/
-└── vision/
-
-core_rust/
-tools/
-```
-
-## 🧠 Core Components
-
-### 🔹 Autonomy Layer
-Responsible for:
-- Exploration logic
-- Curiosity heuristics
-- Background execution loops
-- Controlled task polling
-
-### 🔹 Reasoning Layer
-Handles:
-- Task decomposition
-- Multi-step planning
-- Reflection cycles
-- Output stabilization
-- Structured problem solving
-
-### 🔹 Memory System
-Includes:
-- Short-term memory
-- Working memory
-- Long-term memory (SQLite-backed)
-- Persistent state tracking
-- Context summarization
-
-### 🔹 Skills Registry
-All external actions must pass through skill handlers.
-```
-result = skill_registry.execute("file_read", args)
-```
-Rules:
-- 🚫 No raw shell execution
-- 🚫 No unmanaged subprocess calls
-- 🚫 No direct filesystem manipulation
-
-### 🔹 Policy Enforcement
-Acts as a boundary layer between reasoning and execution.
-Enforces:
-- Operational limits
-- Ethical constraints
-- Permission gating
-- Safe execution fallbacks
-
-### 🔹 Rust Backend (core_rust/)
-Optional performance-oriented backend layer. Provides:
-- Sandboxed execution
-- Deterministic utilities
-- Future concurrency support
-- Low-level performance acceleration
+### 🌍 Multi-Language Engine
+| Language | Purpose |
+|----------|---------|
+| Python | ML, Streamlit UI |
+| Rust | High-performance search |
+| C++ | Core processing |
+| Java | REST API |
+| Go | Background workers |
+| JavaScript | Frontend |
+| C# | Notifications |
+| Ruby | Newsletter |
+| PHP | Webhooks |
+| Perl | Text processing |
+| Fortran | Statistics |
+| R | Analytics |
+| SQL | Database |
+| Delphi | Desktop |
 
 ---
 
-## 🧠 Model Strategy
-Tanya supports dual inference routing.
+## 🚀 Quick Start
 
-### 1️⃣ Local GGUF Inference (Preferred)
-Example model:
-`Mistral-7B-Instruct-v0.3-Q4_K_M.gguf`
-
-Loaded using:
-`llama-cpp-python`
-
-Advantages:
-- Fully offline
-- Low latency
-- Direct model control
-- No external dependency
-
-### 2️⃣ Ollama Fallback
-Used if local GGUF model is unavailable.
-Default endpoint: `http://localhost:11434/api/generate`
-
-Supports:
-- HTTP streaming
-- Local model hosting
-- Flexible experimentation
-
-### 🔁 Model Selection Logic
-```python
-if gguf_exists and llama_cpp_available:
-    use_local_model()
-else:
-    use_ollama()
-```
-
----
-
-## ⚡ Setup
-
-### ✅ Requirements
-- Python 3.10+
-- requests
-- llama-cpp-python (recommended)
-
-### 📦 Installation
-**Using requirements file:**
 ```bash
+# Clone the repo
+git clone https://github.com/Nayak-indie/Tanya.git
+cd Tanya
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+# or
+venv\Scripts\activate     # Windows
+
+# Install dependencies
 pip install -r requirements.txt
-```
-**Manual installation:**
-```bash
-pip install requests
-pip install llama-cpp-python
+
+# Run the app
+streamlit run app.py
 ```
 
-### ▶️ Running Tanya
-**PowerShell Example:**
-```powershell
-$env:LLAMA_N_THREADS = "8"
-$env:LLAMA_DEVICE = "cpu"
-$env:TANYA_GRANT_FILE_ACCESS = "true"
-$env:OLLAMA_URL = "http://localhost:11434/api/generate"
+Open [http://localhost:8502](http://localhost:8502) in your browser!
 
-conda activate tanya
-python tanya_terminal_chat.py
-```
+---
 
-### ⚙️ Performance Optimization
-Recommended environment variables:
+## 📁 Project Structure
+
 ```
-LLAMA_N_THREADS=8
-OMP_NUM_THREADS=8
-LLAMA_DEVICE=cpu
-TANYA_WARM_LLAMA=true
-```
-Benchmark model performance:
-```
-python tools/benchmark_llama.py
-```
-Disable warm-up blocking:
-```
-TANYA_WARM_LLAMA=false
+Tanya/
+├── app.py                    # Main Streamlit app
+├── collect/                  # News collectors
+│   ├── rss_scraper.py
+│   ├── html_scraper.py
+│   └── storage.py
+├── backend/                  # Backend services
+│   ├── ml/                  # ML modules
+│   ├── api/                 # REST API (Java)
+│   ├── workers/             # Background workers (Go)
+│   └── database/            # SQL schemas
+├── core/                    # Core engines
+│   ├── cpp/                # C++ engine
+│   ├── search/             # Rust search
+│   └── text_processor.pl   # Perl processor
+├── frontend/               # Frontend assets
+│   ├── js/
+│   └── css/
+├── integrations/            # Integrations
+│   ├── newsletter.rb
+│   ├── webhook.php
+│   └── notifications/
+└── data/                   # Data storage
 ```
 
 ---
 
-## 🧪 Development Background
-Tanya was developed using:
-- ✨ Cursor as development interface
-- 🧠 Manual architectural design
-- 🔧 Custom reasoning pipeline engineering
-- 🛠️ Iterative backend restructuring
-- 🧩 Modular experimentation cycles
+## 🎨 Screenshots
 
-The orchestration flow, boundary enforcement, and system architecture were manually designed and refined. This is an evolving agent framework under active refinement.
+<div class="screenshots">
 
----
+| Dashboard | RSS Sources | Story Mode |
+|-----------|-------------|------------|
+| ![Dashboard](https://via.placeholder.com/400x250/1a1a2e/58a6ff?text=Dashboard) | ![Sources](https://via.placeholder.com/400x250/1a1a2e/58a6ff?text=RSS+Sources) | ![Story](https://via.placeholder.com/400x250/1a1a2e/58a6ff?text=Story+Mode) |
 
-## 🛡️ Safety Model
-Tanya:
-- ❌ Does not overwrite files without explicit skill authorization
-- ❌ Does not execute destructive system commands
-- ❌ Does not escalate privileges
-- ❌ Does not silently self-modify core architecture
-- ✅ Logs structured execution events
-- ✅ Operates within policy-defined limits
-
-Filesystem access path: `brain_py.skills.file_manager`
-Internet access path: `brain_py.autonomy.explorer`
+</div>
 
 ---
 
-## 📂 Repository Status
-⚠️ Current state:
-- Partially shuffled directory structure
-- Contains experimental modules
-- Includes development artifacts
-- May contain unnecessary files
-- May include cache remnants (e.g., HuggingFace cache)
-- Requires structural cleanup
-- Requires continued development
+## ⚙️ Configuration
 
-🔬 Experimental Areas:
-- Semi-autonomous background loops
-- Structured self-improvement scaffolding
-- Rust performance bridges
-- Multi-model routing
-- Memory abstraction improvements
-- Backend learning workflows
+### Add Custom RSS Source
 
-Breaking changes may occur.
+```python
+from collect.rss_scraper import RSSScraper
 
----
-
-## 🎯 Vision
-Tanya is evolving toward:
-- Structured agent orchestration
-- Goal-driven modular execution
-- Safe autonomous capability expansion
-- Developer-augmented productivity
-- Controlled adaptive workflows
-
-Not limitless. Not uncontrolled. But engineered autonomy.
-
----
-
-## 👨‍💻 Author
-Created and engineered by:
-**nayak-indie (Vinayak)**
-
----
-
-## ⚠️ Disclaimer
-This is a personal experimental AI agent framework.
-Use caution when enabling:
-- Filesystem access
-- Internet access
-- Background autonomy loops
-- Elevated execution permissions
-
-Always test in controlled environments.
-
----
-
-## ⭐ Project Status
-- 🟡 Active Development
-- 🧠 Experimental Agent Architecture
-- ⚙️ Modular System Design
-- 🚧 Cleanup & refinement required
-
----
-
-# Tanya Repo
-This repo contains the code and configs for Tanya.
-
-## Download the large model
-The Mistral-7B-Instruct GGUF model (~4.1GB) is **too big for GitHub**. You can download it by running:
-```bash
-bash ./download_gguf.sh
+scraper = RSSScraper()
+scraper.add_source("My News", "https://example.com/feed.xml")
 ```
-Tanya is not just a chatbot. She is a framework in progress.
 
+### Enable Dark/Light Theme
+
+Toggle in the sidebar of the app.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend**: Streamlit, JavaScript, CSS
+- **Backend**: Python 3.12+, Java, Go
+- **ML**: scikit-learn, NLTK
+- **Search**: Rust (Fuse.js-style)
+- **Storage**: JSON, SQLite ready
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md).
+
+---
+
+## 📜 License
+
+MIT License - see [LICENSE](LICENSE) file.
+
+---
+
+<div align="center">
+
+**Built with ❤️ by [Nayak](https://github.com/Nayak-indie)**
+
+</div>
+
+<!-- Animated typing effect -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const text = "Your personal AI news assistant";
+  const element = document.getElementById('typing-effect');
+  let i = 0;
+  
+  function type() {
+    if (i < text.length) {
+      element.textContent += text.charAt(i);
+      i++;
+      setTimeout(type, 50);
+    }
+  }
+  type();
+});
+</script>
+
+<style>
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.screenshots {
+  animation: fadeIn 1s ease-in-out;
+}
+
+.screenshots img {
+  transition: transform 0.3s ease;
+}
+
+.screenshots img:hover {
+  transform: scale(1.02);
+}
+
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+body {
+  background: linear-gradient(-45deg, #0e1117, #161b22, #1a1a2e, #16213e);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+}
+</style>
