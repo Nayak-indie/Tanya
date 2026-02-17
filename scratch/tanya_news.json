@@ -1,0 +1,182 @@
+{
+  "meta": {
+    "semver": "3.0.0",
+    "vm": "0.2.0",
+    "agent": "Tanya/1.0"
+  },
+  "monitors": [],
+  "targets": [
+    {
+      "isStage": true,
+      "name": "Stage",
+      "variables": {
+        "(`X)score": 0,
+        "(`X)articles_fetched": 0
+      },
+      "lists": {
+        "(`X)news_titles": []
+      },
+      "broadcasts": {},
+      "blocks": {},
+      "comments": {},
+      "currentCostume": 0,
+      "costumes": [
+        {
+          "assetId": "cd21514d0531fdffb22204e0ec5ed84a",
+          "name": "backdrop1",
+          "md5ext": "cd21514d0531fdffb22204e0ec5ed84a.svg",
+          "dataFormat": "svg",
+          "rotationCenterX": 240,
+          "rotationCenterY": 180
+        }
+      ],
+      "sounds": [],
+      "volume": 100,
+      "layerOrder": 0,
+      "tempo": 60,
+      "videoTransparency": 50,
+      "videoState": "on",
+      "textToSpeechLanguage": null
+    },
+    {
+      "isStage": false,
+      "name": "Tanya",
+      "variables": {},
+      "lists": {},
+      "broadcasts": {},
+      "blocks": {
+        "whenGreenFlag": {
+          "opcode": "event_whenflagclicked",
+          "next": "sayHello",
+          "parent": null,
+          "inputs": {},
+          "fields": {},
+          "topLevel": true
+        },
+        "sayHello": {
+          "opcode": "looks_sayforsecs",
+          "next": "fetchRSS",
+          "parent": "whenGreenFlag",
+          "inputs": {
+            "MESSAGE": [
+              10,
+              [
+                10,
+                "Hello! I'm Tanya - your news assistant!"
+              ]
+            ],
+            "SECS": [
+              1,
+              2
+            ]
+          },
+          "fields": {}
+        },
+        "fetchRSS": {
+          "opcode": "control_repeat",
+          "next": null,
+          "parent": "sayHello",
+          "inputs": {
+            "TIMES": [
+              1,
+              [
+                4,
+                "5"
+              ]
+            ],
+            "SUBSTACK": [
+              2,
+              "showStatus"
+            ]
+          },
+          "fields": {}
+        },
+        "showStatus": {
+          "opcode": "looks_say",
+          "next": "wait",
+          "parent": "fetchRSS",
+          "inputs": {
+            "MESSAGE": [
+              10,
+              [
+                10,
+                "Fetching RSS feeds..."
+              ]
+            ]
+          },
+          "fields": {}
+        },
+        "wait": {
+          "opcode": "control_wait",
+          "next": "incrementCounter",
+          "parent": "showStatus",
+          "inputs": {
+            "DURATION": [
+              1,
+              [
+                4,
+                "1"
+              ]
+            ]
+          },
+          "fields": {}
+        },
+        "incrementCounter": {
+          "opcode": "looks_changeeffectby",
+          "next": null,
+          "parent": "wait",
+          "inputs": {
+            "CHANGE": [
+              1,
+              [
+                4,
+                "10"
+              ]
+            ]
+          },
+          "fields": {
+            "EFFECT": ["BRIGHTNESS", null]
+          }
+        }
+      },
+      "comments": {},
+      "currentCostume": 0,
+      "costumes": [
+        {
+          "assetId": "b7855e53d2d849d73c8c0d6e2b0d0e2c",
+          "name": "tanya-a",
+          "md5ext": "b7855e53d2d849d73c8c0d6e2b0d0e2c.svg",
+          "dataFormat": "svg",
+          "rotationCenterX": 67,
+          "rotationCenterY": 93
+        }
+      ],
+      "sounds": [
+        {
+          "assetId": "83a9787d4cb6f3b7632b4ddfebf7430d",
+          "name": "pop",
+          "md5ext": "83a9787d4cb6f3b7632b4ddfebf7430d.wav",
+          "dataFormat": "wav",
+          "rate": 44100,
+          "sampleCount": 1032
+        }
+      ],
+      "volume": 100,
+      "layerOrder": 1,
+      "visible": true,
+      "x": 0,
+      "y": 0,
+      "size": 100,
+      "direction": 90,
+      "draggable": false,
+      "rotationStyle": "all around"
+    }
+  ],
+  "extensions": [],
+  "generators": {
+    "Tanya": "Scratch-based news assistant UI prototype"
+  },
+  "comments": {
+    "project": "Tanya Scratch Prototype - Visual programming version of news aggregator"
+  }
+}
