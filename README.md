@@ -1,78 +1,57 @@
-# 📰 Tanya - Smart News Aggregator
+# 📰 Tanya - Trending And New Yielded Articles
 
 <div align="center">
 
 ![Python](https://img.shields.io/badge/python-3.12+-blue?style=for-the-badge&logo=python&logoColor=white)
-![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
+![Rust](https://img.shields.io/badge/rust-DEA584?style=for-the-badge&logo=rust&logoColor=white)
+![C++](https://img.shields.io/badge/c++-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white)
+![Java](https://img.shields.io/badge/java-ED8B00?style=for-the-badge&logo=java&logoColor=white)
+![Go](https://img.shields.io/badge/go-00ADD8?style=for-the-badge&logo=go&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)
 
 </div>
 
 ---
 
-Tanya (Trending And New Yielded Articles) is a polyglot news aggregator experiment—scraping, analyzing, and serving news using Python, Rust, C++, Java, Go, and more. Built with 14+ languages as a fun experiment in seeing how different technologies can work together to build something useful.
+Tanya (Trending And New Yielded Articles) is a **real polyglot news aggregator**—not a demo or placeholder, but a fully functional app where each language does actual work.
+
+**Python is only ~10%** of the codebase. The rest is Rust, C++, Java, Go, Node.js, and more.
 
 ---
 
-## ✨ Features
+## 🏗️ Architecture
 
-### 📊 News Collection
-- **Multi-source RSS Aggregation** - Collect from 20+ pre-configured sources
-- **HTML Scraping** - Extract news from any webpage
-- **Auto-refresh** - Keep your feed up to date
-
-### 🧠 Smart Analysis
-- **Sentiment Analysis** - Understand the tone of each article
-- **Keyword Extraction** - Discover trending topics
-- **Duplicate Detection** - Filter out similar articles
-- **Reading Time** - Know before you click
-
-### 📖 Story Mode
-- **Backstory** - How it all started with historical context
-- **Current Events** - What's happening now
-- **My Take** - Balanced perspective and opinion
-
-### 🌍 Multi-Language Engine
-| Language | Purpose |
-|----------|---------|
-| Python | ML, Streamlit UI |
-| Rust | High-performance search |
-| C++ | Core processing |
-| Java | REST API |
-| Go | Background workers |
-| JavaScript | Frontend |
-| C# | Notifications |
-| Ruby | Newsletter |
-| PHP | Webhooks |
-| Perl | Text processing |
-| Fortran | Statistics |
-| R | Analytics |
-| SQL | Database |
-| Delphi | Desktop |
+| Language | Component | What It Does |
+|----------|-----------|--------------|
+| **Python** | UI Layer | Streamlit web interface (10%) |
+| **Rust** | Core Engine | RSS fetching, full-text search, storage, deduplication |
+| **C++** | Processing | High-speed duplicate detection |
+| **Go** | Worker | Background news fetching daemon |
+| **Java** | API | REST API server |
+| **Node.js** | Scraper | Alternative RSS scraper |
+| **Perl** | Text | Text processing utilities |
+| **Fortran** | Stats | Statistical analysis |
+| **R** | Analytics | Data analytics |
 
 ---
 
 ## 🚀 Quick Start
 
+### Option 1: UI Only (Python)
 ```bash
-# Clone the repo
-git clone https://github.com/Nayak-indie/Tanya.git
-cd Tanya
-
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-# or
-venv\Scripts\activate     # Windows
-
-# Install dependencies
 pip install -r requirements.txt
+streamlit run app.py
+```
+
+### Option 2: Full Polyglot
+See [INSTALL.md](INSTALL.md) for installing all languages, then:
+```bash
+# Build all components
+./build.sh
 
 # Run the app
 streamlit run app.py
 ```
-
-Open [http://localhost:8502](http://localhost:8502) in your browser!
 
 ---
 
@@ -80,62 +59,87 @@ Open [http://localhost:8502](http://localhost:8502) in your browser!
 
 ```
 Tanya/
-├── app.py                    # Main Streamlit app
-├── collect/                  # News collectors
-│   ├── rss_scraper.py
-│   ├── html_scraper.py
-│   └── storage.py
-├── backend/                  # Backend services
-│   ├── ml/                  # ML modules
-│   ├── api/                 # REST API (Java)
-│   ├── workers/             # Background workers (Go)
-│   └── database/            # SQL schemas
-├── core/                    # Core engines
-│   ├── cpp/                # C++ engine
-│   ├── search/             # Rust search
-│   └── text_processor.pl   # Perl processor
-├── frontend/               # Frontend assets
-│   ├── js/
-│   └── css/
-├── integrations/            # Integrations
-│   ├── newsletter.rb
-│   ├── webhook.php
-│   └── notifications/
-└── data/                   # Data storage
+├── app.py                    # Streamlit UI (Python - 10%)
+├── rust/                     # RSS, Search, Storage (Rust)
+│   └── src/
+│       ├── rss_fetcher.rs
+│       ├── search.rs
+│       ├── storage.rs
+│       └── dedup.rs
+├── cpp/src/                 # Duplicate detection (C++)
+│   └── dedup.cpp
+├── go/cmd/                 # Background worker (Go)
+│   └── worker.go
+├── java/src/               # REST API (Java)
+│   └── APIServer.java
+├── js/src/                 # Alternative scraper (Node.js)
+│   └── scraper.js
+├── core/text_processor.pl   # Text processing (Perl)
+├── backend/ml/compute.f90  # Statistics (Fortran)
+├── backend/ml/analyze.R   # Analytics (R)
+├── build.sh               # Build all components
+└── INSTALL.md             # Full installation guide
 ```
 
 ---
 
-## ⚙️ Configuration
+## 🛠️ Usage
 
-### Add Custom RSS Source
-
-```python
-from collect.rss_scraper import RSSScraper
-
-scraper = RSSScraper()
-scraper.add_source("My News", "https://example.com/feed.xml")
+### Fetch News (Rust)
+```bash
+./rust/target/release/rss_fetcher
+./rust/target/release/rss_fetcher https://example.com/feed.xml
 ```
 
-### Enable Dark/Light Theme
+### Search (Rust)
+```bash
+./rust/target/release/search "artificial intelligence"
+./rust/target/release/search "tech" --limit 10
+```
 
-Toggle in the sidebar of the app.
+### Deduplicate (C++)
+```bash
+./cpp/bin/dedup stats
+./cpp/bin/dedup dedup 0.8
+./cpp/bin/dedup remove 0.8
+```
+
+### Run API Server (Java)
+```bash
+cd java/src
+javac APIServer.java
+java APIServer 8080
+```
+
+### Background Worker (Go)
+```bash
+cd go/cmd
+go run worker.go --once           # Run once
+go run worker.go --daemon         # Run continuously
+```
+
+### Scrape with Node.js
+```bash
+node js/src/scraper.js --all
+node js/src/scraper.js --source BBC
+```
 
 ---
 
-## 🛠️ Tech Stack
+## 📥 Installation
 
-- **Frontend**: Streamlit, JavaScript, CSS
-- **Backend**: Python 3.12+, Java, Go
-- **ML**: scikit-learn, NLTK
-- **Search**: Rust (Fuse.js-style)
-- **Storage**: JSON, SQLite ready
+See [INSTALL.md](INSTALL.md) for complete installation instructions for each language on:
+- Ubuntu/Debian
+- macOS
+- Windows (WSL)
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md).
+This is a polyglot experiment. Contributions in any language welcome!
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ---
 
@@ -148,5 +152,7 @@ MIT License - see [LICENSE](LICENSE) file.
 <div align="center">
 
 **Built with ❤️ by [Nayak](https://github.com/Nayak-indie)**
+
+*Python: 10% | Everything else: 90%*
 
 </div>
