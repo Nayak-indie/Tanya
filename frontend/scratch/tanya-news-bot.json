@@ -1,0 +1,60 @@
+{
+  "meta": {
+    "name": "Tanya News Bot",
+    "description": "Scratch-based news collection automation",
+    "author": "Tanya",
+    "version": "1.0"
+  },
+  "targets": [
+    {
+      "name": "News Collector",
+      "isStage": true,
+      "variables": {
+        "articlesCollected": 0,
+        "lastUpdate": "",
+        "currentKeyword": ""
+      },
+      "lists": {
+        "newsQueue": [],
+        "keywords": ["AI", "breaking", "update"]
+      },
+      "broadcasts": {
+        "newArticle": "newArticle",
+        "collectionComplete": "collectionComplete"
+      },
+      "blocks": {
+        "event_start": {
+          "opcode": "event_whenGreenFlagClicked",
+          "next": "collection_loop",
+          "parent": null
+        },
+        "collection_loop": {
+          "opcode": "control_forever",
+          "next": null,
+          "parent": "event_start",
+          "substack": "rss_fetch"
+        },
+        "rss_fetch": {
+          "opcode": "procedures_call",
+          "parent": "collection_loop",
+          "mutation": {
+            "procedure": "fetchRSS"
+          }
+        },
+        "check_keyword": {
+          "opcode": "control_if",
+          "parent": "rss_fetch",
+          "condition": "looks_contains",
+          "substack": "broadcast_alert"
+        },
+        "broadcast_alert": {
+          "opcode": "event_broadcast",
+          "parent": "check_keyword",
+          "broadcast": "newArticle"
+        }
+      }
+    }
+  ],
+  "extensions": [],
+  "runtime": "scratch-gui"
+}

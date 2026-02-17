@@ -1,20 +1,5 @@
-# Tanya AI - Core Dependencies
-requests
-flask
-psutil
-opencv-python
-
-# Streamlit Web UI
-streamlit
-
-# Optional: Local LLM inference
-# llama-cpp-python
-
-# Optional: Voice
-# pyttsx3
-# speech-recognition
-
-# Optional: Advanced
-# pyperclip
-# transformers
-# torch
+streamlit>=1.28.0
+requests>=2.31.0
+feedparser>=6.0.10
+beautifulsoup4>=4.12.0
+lxml>=4.9.0

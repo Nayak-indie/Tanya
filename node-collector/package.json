@@ -1,0 +1,15 @@
+{
+  "name": "newsflow-collector",
+  "version": "1.0.0",
+  "description": "Node.js news collector for NewsFlow",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "collect": "node index.js"
+  },
+  "dependencies": {
+    "rss-parser": "^3.13.0",
+    "axios": "^1.6.0",
+    "cheerio": "^1.0.0-rc.12"
+  }
+}

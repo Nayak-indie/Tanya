@@ -1,0 +1,12 @@
+[
+  {
+    "name": "BBC Home",
+    "url": "https://www.bbc.com/news",
+    "enabled": true
+  },
+  {
+    "name": "CNN",
+    "url": "https://www.cnn.com",
+    "enabled": false
+  }
+]

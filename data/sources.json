@@ -1,0 +1,22 @@
+[
+  {
+    "name": "BBC News",
+    "url": "https://feeds.bbci.co.uk/news/rss.xml",
+    "enabled": true
+  },
+  {
+    "name": "TechCrunch",
+    "url": "https://techcrunch.com/feed/",
+    "enabled": true
+  },
+  {
+    "name": "Hacker News",
+    "url": "https://news.ycombinator.com/rss",
+    "enabled": true
+  },
+  {
+    "name": "Reuters",
+    "url": "https://www.reutersagency.com/feed/",
+    "enabled": false
+  }
+]
