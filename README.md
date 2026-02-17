@@ -5,9 +5,12 @@
 ![Python](https://img.shields.io/badge/python-3.12+-blue?style=for-the-badge&logo=python&logoColor=white)
 ![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)
-![Status](https://img.shields.io/badge/status-active-success?style=for-the-badge)
 
 </div>
+
+---
+
+Tanya is a polyglot news aggregator experiment—scraping, analyzing, and serving news using Python, Rust, C++, Java, Go, and more. Built with 14+ languages as a fun experiment in seeing how different technologies can work together to build something useful.
 
 ---
 
@@ -103,18 +106,6 @@ Tanya/
 
 ---
 
-## 🎨 Screenshots
-
-<div class="screenshots">
-
-| Dashboard | RSS Sources | Story Mode |
-|-----------|-------------|------------|
-| ![Dashboard](https://via.placeholder.com/400x250/1a1a2e/58a6ff?text=Dashboard) | ![Sources](https://via.placeholder.com/400x250/1a1a2e/58a6ff?text=RSS+Sources) | ![Story](https://via.placeholder.com/400x250/1a1a2e/58a6ff?text=Story+Mode) |
-
-</div>
-
----
-
 ## ⚙️ Configuration
 
 ### Add Custom RSS Source
@@ -159,62 +150,3 @@ MIT License - see [LICENSE](LICENSE) file.
 **Built with ❤️ by [Nayak](https://github.com/Nayak-indie)**
 
 </div>
-
-<!-- Animated typing effect -->
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const text = "Your personal AI news assistant";
-  const element = document.getElementById('typing-effect');
-  let i = 0;
-  
-  function type() {
-    if (i < text.length) {
-      element.textContent += text.charAt(i);
-      i++;
-      setTimeout(type, 50);
-    }
-  }
-  type();
-});
-</script>
-
-<style>
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-}
-
-@keyframes slideIn {
-  from { opacity: 0; transform: translateX(-20px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-.screenshots {
-  animation: fadeIn 1s ease-in-out;
-}
-
-.screenshots img {
-  transition: transform 0.3s ease;
-}
-
-.screenshots img:hover {
-  transform: scale(1.02);
-}
-
-@keyframes gradient {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-body {
-  background: linear-gradient(-45deg, #0e1117, #161b22, #1a1a2e, #16213e);
-  background-size: 400% 400%;
-  animation: gradient 15s ease infinite;
-}
-</style>
