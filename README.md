@@ -19,6 +19,39 @@ Tanya (Trending And New Yielded Articles) is a **real polyglot news aggregator**
 
 ---
 
+
+
+## 📌 Project Overview
+
+Tanya is a multi-language news aggregation platform that demonstrates how different programming languages can work together in a modular architecture.
+
+Each language in the project handles a specific responsibility such as scraping, processing, analytics, API serving, or UI rendering. The goal is to showcase interoperability between languages while building a real working news aggregation system.
+
+This project is suitable for contributors interested in:
+- Polyglot architecture
+- Distributed systems
+- Cross-language integration
+- Performance comparisons between languages
+---
+---
+
+## 📁 Project Structure
+
+Below is a simplified overview of the repository layout:
+
+- `app.py` – Streamlit UI layer (Python)
+- `rust/` – Core RSS fetching and storage engine
+- `cpp/` – Duplicate detection logic
+- `go/` – Background worker service
+- `java/` – REST API server
+- `js/` – Alternative scraper
+- `c/` – Low-level RSS parser
+- `kotlin/` – JVM-based scraper
+- `julia/` – Analytics module
+
+Refer to individual folders for language-specific build and run instructions.
+
+
 ## 🏗️ Architecture
 
 | Language | Component | What It Does |
@@ -92,9 +125,48 @@ See [INSTALL.md](INSTALL.md) for complete setup on Ubuntu, macOS, Windows (WSL).
 
 ## 🤝 Contributing
 
-Contributions in any language welcome! See [CONTRIBUTING.md](CONTRIBUTING.md).
+Contributions in any language are welcome!
+
+To contribute:
+
+1. Fork the repository.
+
+2. Create a new branch:
+   ```bash
+   git checkout -b feature-name
+3. Make your changes.
+
+Commit your changes:
+
+git commit -m "Describe your changes"
+
+
+4. Push your branch:
+
+git push origin feature-name
+
+
+5. Open a Pull Request.
+
+
+Save the file.
 
 ---
+
+
+
+
+
+# ✅ After Pasting
+
+Save the file.
+
+Then run:
+
+```bash
+git add README.md
+git commit -m "Improve documentation: enhanced contributing section clarity and formatting"
+git push origin improve-docs
 
 ## 📜 License
 
@@ -109,3 +181,8 @@ MIT License - see [LICENSE](LICENSE).
 *Python: 10% | 22 Other Languages: 90%*
 
 </div>
+
+
+---
+
+Documentation improvements contributed by @Chandana-basude
